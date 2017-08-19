@@ -1,1 +1,1 @@
-this is TEST-TASK for 
+this is TEST-TASK (get Weather) for LoopMe
