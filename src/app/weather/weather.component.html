@@ -1,0 +1,26 @@
+  <input #city
+         places-auto-complete
+         (initialized$)="initialized($event)"
+         [types]="['geocode']"
+         placeholder="{{value.city.name}}">
+  <input type="submit" value="change city" (click)="changeCity($event,city.value)"><br>
+  current city - {{value.city.name + ',' + value.city.country}}
+
+  <!--<div *ngFor="let day of days">-->
+    <!--<h3>date - {{ day.dt*1000| date}}</h3>-->
+    <!--min.temp - {{day.temp.min}}<br>-->
+    <!--max.temp - {{day.temp.max}}<br>-->
+    <!--weather now - {{day.weather[0].description| json}}<br>-->
+
+  <!--</div>-->
+
+  <div align="left">
+    <div style="display: inline-block" (click)="toTemp()">temperature</div>
+    <div style="display: inline-block" (click)="toPressure()">pressure</div>
+  </div>
+
+  <div>
+    <nvd3 [options]="options" [data]="data"></nvd3>
+  </div>
+
+

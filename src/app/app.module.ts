@@ -2,15 +2,37 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import {HttpClientModule} from "@angular/common/http";
+import {GetDataService} from "./get-data.service";
+import {AppResolver} from "./app.resolver";
+import {RouterModule} from "@angular/router";
+import {routes} from "./app.routes";
+import { WeatherComponent } from './weather/weather.component';
+import { NvD3Module } from 'ng2-nvd3';
+import 'd3';
+import 'nvd3';
+import {NguiAutoCompleteModule} from '@ngui/auto-complete';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { NguiMapModule } from '@ngui/map';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WeatherComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    RouterModule.forRoot(routes),
+    NvD3Module,
+    NguiAutoCompleteModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NguiMapModule.forRoot({
+      apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCSs-SqvbXiS4tBbwJgnvV_uWvZgweOvO0&libraries=visualization,places,drawing'
+    }),
   ],
-  providers: [],
+  providers: [GetDataService, AppResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
