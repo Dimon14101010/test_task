@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {GetDataService} from "../get-data.service";
 
 @Component({
@@ -14,8 +14,7 @@ export class WeatherComponent implements OnInit {
   options;
   data;
   currentCity;
-  title;
-  constructor (private getData: GetDataService, private ref: ChangeDetectorRef) {}
+  constructor (private getData: GetDataService) {}
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
@@ -33,8 +32,8 @@ export class WeatherComponent implements OnInit {
           bottom: 50,
           left: 55
         },
-        x: function(d){return d.label;},
-        y: function(d){return d.value;},
+        x: function(d){return d.label; },
+        y: function(d){return d.value; },
         showValues: true,
         valueFormat: function(d){
           return d3.format(',.2f')(d);
@@ -48,7 +47,7 @@ export class WeatherComponent implements OnInit {
           axisLabelDistance: -10
         }
       }
-    }
+    };
     this.data = [
       {
         key: "Cumulative Return",
@@ -145,8 +144,8 @@ export class WeatherComponent implements OnInit {
             bottom: 50,
             left: 55
           },
-          x: function(d){return d.label;},
-          y: function(d){return d.value;},
+          x: function(d){return d.label; },
+          y: function(d){return d.value; },
           showValues: true,
           valueFormat: function(d){
             return d3.format(',.2f')(d);
@@ -160,7 +159,7 @@ export class WeatherComponent implements OnInit {
             axisLabelDistance: -10
           }
         }
-      }
+      };
       this.data = [
         {
           key: "Cumulative Return",
@@ -254,8 +253,8 @@ export class WeatherComponent implements OnInit {
           bottom: 50,
           left: 55
         },
-        x: function(d){return d.label;},
-        y: function(d){return d.value;},
+        x: function(d){return d.label; },
+        y: function(d){return d.value; },
         showValues: true,
         valueFormat: function(d){
           return d3.format(',.2f')(d);
@@ -269,7 +268,7 @@ export class WeatherComponent implements OnInit {
           axisLabelDistance: -10
         }
       }
-    }
+    };
     this.data = [
       {
         key: "Cumulative Return",
@@ -361,8 +360,8 @@ export class WeatherComponent implements OnInit {
           bottom: 50,
           left: 55
         },
-        x: function(d){return d.label;},
-        y: function(d){return d.value;},
+        x: function(d){return d.label; },
+        y: function(d){return d.value; },
         showValues: true,
         valueFormat: function(d){
           return d3.format(',.2f')(d);
@@ -376,7 +375,7 @@ export class WeatherComponent implements OnInit {
           axisLabelDistance: -10
         }
       }
-    }
+    };
     this.data = [
       {
         key: "Cumulative Return",

@@ -29,8 +29,8 @@ import { NguiMapModule } from '@ngui/map';
     ReactiveFormsModule,
     FormsModule,
     NguiMapModule.forRoot({
-      apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCSs-SqvbXiS4tBbwJgnvV_uWvZgweOvO0&libraries=visualization,places,drawing'
-    }),
+      apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyDEoWdHxrHdByZBns7_34cPl9KWY7c3sUI&libraries=visualization,places,drawing'
+    })
   ],
   providers: [GetDataService, AppResolver],
   bootstrap: [AppComponent]
