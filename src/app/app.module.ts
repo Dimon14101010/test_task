@@ -13,6 +13,7 @@ import 'd3';
 import 'nvd3';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NguiMapModule } from '@ngui/map';
+import {WeatherDiagrammService} from "./weather/weather-diagramm.service";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { NguiMapModule } from '@ngui/map';
       apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyDEoWdHxrHdByZBns7_34cPl9KWY7c3sUI&libraries=visualization,places,drawing'
     })
   ],
-  providers: [GetDataService, AppResolver],
+  providers: [GetDataService, AppResolver, WeatherDiagrammService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

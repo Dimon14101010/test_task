@@ -2,10 +2,10 @@
          places-auto-complete
          (initialized$)="initialized($event)"
          [types]="['geocode']"
-         placeholder="{{value.city.name}}">
+         placeholder="{{value?.city.name}}">
   <input type="submit" value="change city" (click)="changeCity($event,city.value)"><br>
-  <h2>{{value.city.name + ',' + value.city.country}}</h2>
-  <h4>{{days[0].temp.day}} &deg;C  {{days[0].weather[0].description}} <br> pressure{{days[0].pressure}}</h4>
+  <h2>{{value?.city.name + ',' + value?.city.country}}</h2>
+  <h4>{{days[0]?.temp.day}} &deg;C  {{days[0]?.weather[0].description}} <br> pressure{{days[0]?.pressure}}</h4>
 
 
   <!--<div *ngFor="let day of days">-->

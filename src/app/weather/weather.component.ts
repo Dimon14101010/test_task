@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {GetDataService} from "../get-data.service";
+import {WeatherDiagrammService} from "./weather-diagramm.service";
 
 @Component({
   selector: 'app-weather',
@@ -10,452 +11,78 @@ import {GetDataService} from "../get-data.service";
 export class WeatherComponent implements OnInit {
   autocomplete: google.maps.places.Autocomplete;
   value: any;
-  days: any;
+  days: any = [];
   options;
   data;
+  valuesDiagramTemp = [];
+  valuesDiagramPress = [];
   currentCity;
-  dataDiagramm = [];
-  constructor (private getData: GetDataService) {}
+  constructor (private getData: GetDataService, private diagram: WeatherDiagrammService) {}
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
   ngOnInit () {
-    this.getData.getApi('').subscribe(response => {this.value = response;
+    this.getData.getApi(this.currentCity).subscribe(response => {this.value = response;
+    this.currentCity = this.value.city.name;
     console.log('weateher data', response);
     this.days = this.value.list;
-    for (let i = 0; i < this.value.list.lenght; i++) {
-      this.dataDiagramm.push(this.value.list[i].temp.day)
-      console.log('diagramm' , this.dataDiagramm)
-    }
-    this.options = {
-      chart: {
-        type: 'discreteBarChart',
-        height: 450,
-        margin : {
-          top: 20,
-          right: 20,
-          bottom: 50,
-          left: 55
-        },
-        x: function(d){return d.label; },
-        y: function(d){return d.value; },
-        showValues: true,
-        valueFormat: function(d){
-          return d3.format(',.2f')(d);
-        },
-        duration: 700,
-        xAxis: {
-          axisLabel: 'days'
-        },
-        yAxis: {
-          axisLabel: 'temperature',
-          axisLabelDistance: -10
-        }
+    this.options = this.diagram.diagramOptions;
+      for (let i = 0 ; i < this.getData.days ; i++) {
+        this.valuesDiagramTemp[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
+        'value' : this.value.list[i].temp.day};
+        console.log('values' , this.valuesDiagramTemp);
       }
-    };
     this.data = [
       {
         key: "Cumulative Return",
-        values: [
-          {
-            "label" : new Date(this.value.list[0].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[0].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[1].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[1].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[2].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[2].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[3].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[3].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[4].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[4].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[5].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[5].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[6].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[6].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[7].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[7].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[8].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[8].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[9].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[9].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[10].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[10].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[11].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[11].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[12].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[12].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[13].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[13].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[14].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[14].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[15].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[15].temp.day
-          }
-        ]
+        values: this.valuesDiagramTemp
       }
     ];
     });
   }
   changeCity (event, city) {
     this.getData.getApi(city).subscribe(response => {this.value = response;
+    this.currentCity = city;
       this.days = this.value.list;
-      this.options = {
-        chart: {
-          type: 'discreteBarChart',
-          height: 450,
-          margin : {
-            top: 20,
-            right: 20,
-            bottom: 50,
-            left: 55
-          },
-          x: function(d){return d.label; },
-          y: function(d){return d.value; },
-          showValues: true,
-          valueFormat: function(d){
-            return d3.format(',.2f')(d);
-          },
-          duration: 500,
-          xAxis: {
-            axisLabel: 'days'
-          },
-          yAxis: {
-            axisLabel: 'temperature',
-            axisLabelDistance: -10
-          }
-        }
-      };
+      this.options = this.diagram.diagramOptions;
+      for (let i = 0 ; i < this.getData.days ; i++) {
+        this.valuesDiagramTemp[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
+          'value' : this.value.list[i].temp.day};
+      }
       this.data = [
         {
           key: "Cumulative Return",
-          values: [
-            {
-              "label" : new Date(this.value.list[0].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[0].temp.max
-            },
-            {
-              "label" : new Date(this.value.list[1].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[1].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[2].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[2].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[3].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[3].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[4].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[4].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[5].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[5].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[6].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[6].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[7].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[7].temp.day
-            },
-            {
-              "label" : new Date(this.value.list[8].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[8].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[9].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[9].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[10].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[10].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[11].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[11].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[12].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[12].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[13].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[13].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[14].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[14].temp.day
-            }
-            ,
-            {
-              "label" : new Date(this.value.list[15].dt * 1000).toLocaleDateString(),
-              "value" : this.value.list[15].temp.day
-            }
-          ]
+          values: this.valuesDiagramTemp
         }
       ];
     });
   console.log(city, this.value.list);
   }
   toPressure () {
-    this.options = {
-      chart: {
-        type: 'discreteBarChart',
-        height: 450,
-        margin : {
-          top: 20,
-          right: 20,
-          bottom: 50,
-          left: 55
-        },
-        x: function(d){return d.label; },
-        y: function(d){return d.value; },
-        showValues: true,
-        valueFormat: function(d){
-          return d3.format(',.2f')(d);
-        },
-        duration: 700,
-        xAxis: {
-          axisLabel: 'days'
-        },
-        yAxis: {
-          axisLabel: 'pressure',
-          axisLabelDistance: -10
+    console.log(this.currentCity)
+
+    this.getData.getApi(this.currentCity).subscribe(response => {this.value = response;
+    this.options = this.diagram.diagramOptions;
+    this.days = this.value.list;
+    for (let i = 0 ; i < this.getData.days ; i++) {
+      this.valuesDiagramPress[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
+        'value' : this.value.list[i].pressure};
+    }
+
+      this.data = [
+        {
+          key: "Cumulative Return",
+          values: this.valuesDiagramPress
         }
-      }
-    };
-    this.data = [
-      {
-        key: "Cumulative Return",
-        values: [
-          {
-            "label" : new Date(this.value.list[0].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[0].pressure
-          },
-          {
-            "label" : new Date(this.value.list[1].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[1].pressure
-          },
-          {
-            "label" : new Date(this.value.list[2].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[2].pressure
-          },
-          {
-            "label" : new Date(this.value.list[3].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[3].pressure
-          },
-          {
-            "label" : new Date(this.value.list[4].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[4].pressure
-          },
-          {
-            "label" : new Date(this.value.list[5].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[5].pressure
-          },
-          {
-            "label" : new Date(this.value.list[6].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[6].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[7].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[7].pressure
-          },
-          {
-            "label" : new Date(this.value.list[8].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[8].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[9].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[9].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[10].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[10].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[11].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[11].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[12].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[12].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[13].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[13].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[14].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[14].pressure
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[15].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[15].pressure
-          }
-        ]
-      }
-    ];
+      ];
+    });
   }
   toTemp () {
-    this.options = {
-      chart: {
-        type: 'discreteBarChart',
-        height: 450,
-        margin : {
-          top: 20,
-          right: 20,
-          bottom: 50,
-          left: 55
-        },
-        x: function(d){return d.label; },
-        y: function(d){return d.value; },
-        showValues: true,
-        valueFormat: function(d){
-          return d3.format(',.2f')(d);
-        },
-        duration: 500,
-        xAxis: {
-          axisLabel: 'days'
-        },
-        yAxis: {
-          axisLabel: 'temperature',
-          axisLabelDistance: -10
-        }
-      }
-    };
+    this.options = this.diagram.diagramOptions;
     this.data = [
       {
         key: "Cumulative Return",
-        values: [
-          {
-            "label" : new Date(this.value.list[0].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[0].temp.max
-          },
-          {
-            "label" : new Date(this.value.list[1].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[1].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[2].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[2].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[3].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[3].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[4].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[4].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[5].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[5].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[6].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[6].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[7].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[7].temp.day
-          },
-          {
-            "label" : new Date(this.value.list[8].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[8].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[9].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[9].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[10].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[10].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[11].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[11].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[12].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[12].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[13].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[13].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[14].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[14].temp.day
-          }
-          ,
-          {
-            "label" : new Date(this.value.list[15].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[15].temp.day
-          }
-        ]
+        values: this.valuesDiagramTemp
       }
     ];
   }

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable ()
 export class GetDataService {
   defCity = 'Dnipropetrovsk';
-  newCity: any;
+  days = 16;
   constructor (private http: HttpClient) {}
   getApi (city) {
     if (!city) {
@@ -14,7 +14,7 @@ export class GetDataService {
     const params = new HttpParams()
       .set ('q' , city)
       .set ('APPID' , 'bd5e378503939ddaee76f12ad7a97608')
-      .set ('cnt' , '16')
+      .set ('cnt' , this.days.toString())
       .set ('units' , 'metric');
     return this.http.get
     ('http://api.openweathermap.org/data/2.5/forecast/daily' , {params})

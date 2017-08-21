@@ -7,6 +7,6 @@ export class AppResolver implements Resolve<any> {
   constructor (private data: GetDataService) {}
 
   resolve () {
-    return this.data.getApi('London');
+    return this.data.getApi('');
   }
 }
