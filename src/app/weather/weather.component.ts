@@ -10,7 +10,8 @@ import {WeatherDiagrammService} from "./weather-diagramm.service";
 })
 export class WeatherComponent implements OnInit {
   autocomplete: google.maps.places.Autocomplete;
-  value: any;
+  valueDaily: any;
+  valueNow: any;
   days: any = [];
   options;
   data;
@@ -22,14 +23,15 @@ export class WeatherComponent implements OnInit {
     this.autocomplete = autocomplete;
   }
   ngOnInit () {
-    this.getData.getApi(this.currentCity).subscribe(response => {this.value = response;
-    this.currentCity = this.value.city.name;
+    this.getData.getWeatherNow(this.currentCity).subscribe(response => this.valueNow = response);
+    this.getData.getWeatherDaily(this.currentCity).subscribe(response => {this.valueDaily = response;
+    this.currentCity = this.valueDaily.city.name;
     console.log('weateher data', response);
-    this.days = this.value.list;
+    this.days = this.valueDaily.list;
     this.options = this.diagram.diagramOptions;
       for (let i = 0 ; i < this.getData.days ; i++) {
-        this.valuesDiagramTemp[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
-        'value' : this.value.list[i].temp.day};
+        this.valuesDiagramTemp[i] = {'label' : new Date(this.valueDaily.list[i].dt * 1000).toLocaleDateString(),
+        'value' : this.valueDaily.list[i].temp.day};
         console.log('values' , this.valuesDiagramTemp);
       }
     this.data = [
@@ -41,13 +43,14 @@ export class WeatherComponent implements OnInit {
     });
   }
   changeCity (event, city) {
-    this.getData.getApi(city).subscribe(response => {this.value = response;
+    this.getData.getWeatherNow(city).subscribe(response => this.valueNow = response);
+    this.getData.getWeatherDaily(city).subscribe(response => {this.valueDaily = response;
     this.currentCity = city;
-      this.days = this.value.list;
+      this.days = this.valueDaily.list;
       this.options = this.diagram.diagramOptions;
       for (let i = 0 ; i < this.getData.days ; i++) {
-        this.valuesDiagramTemp[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
-          'value' : this.value.list[i].temp.day};
+        this.valuesDiagramTemp[i] = {'label' : new Date(this.valueDaily.list[i].dt * 1000).toLocaleDateString(),
+          'value' : this.valueDaily.list[i].temp.day};
       }
       this.data = [
         {
@@ -56,17 +59,18 @@ export class WeatherComponent implements OnInit {
         }
       ];
     });
-  console.log(city, this.value.list);
+  console.log(city, this.valueDaily.list);
   }
   toPressure () {
+    this.getData.getWeatherNow(this.currentCity).subscribe(response => this.valueNow = response);
     console.log(this.currentCity)
 
-    this.getData.getApi(this.currentCity).subscribe(response => {this.value = response;
+    this.getData.getWeatherDaily(this.currentCity).subscribe(response => {this.valueDaily = response;
     this.options = this.diagram.diagramOptions;
-    this.days = this.value.list;
+    this.days = this.valueDaily.list;
     for (let i = 0 ; i < this.getData.days ; i++) {
-      this.valuesDiagramPress[i] = {'label' : new Date(this.value.list[i].dt * 1000).toLocaleDateString(),
-        'value' : this.value.list[i].pressure};
+      this.valuesDiagramPress[i] = {'label' : new Date(this.valueDaily.list[i].dt * 1000).toLocaleDateString(),
+        'value' : this.valueDaily.list[i].pressure};
     }
 
       this.data = [
@@ -78,6 +82,7 @@ export class WeatherComponent implements OnInit {
     });
   }
   toTemp () {
+    this.getData.getWeatherNow(this.currentCity).subscribe(response => this.valueNow = response);
     this.options = this.diagram.diagramOptions;
     this.data = [
       {

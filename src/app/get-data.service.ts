@@ -7,7 +7,19 @@ export class GetDataService {
   defCity = 'Dnipropetrovsk';
   days = 16;
   constructor (private http: HttpClient) {}
-  getApi (city) {
+  getWeatherNow (city) {
+    if (!city) {
+      city = this.defCity;
+    }
+    const params = new HttpParams()
+      .set ('q' , city)
+      .set ('APPID' , 'bd5e378503939ddaee76f12ad7a97608')
+      .set ('units' , 'metric');
+    return this.http.get
+    ('http://api.openweathermap.org/data/2.5/weather' , {params})
+
+  }
+  getWeatherDaily (city) {
     if (!city) {
       city = this.defCity;
     }
