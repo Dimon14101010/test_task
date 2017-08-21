@@ -14,14 +14,19 @@ export class WeatherComponent implements OnInit {
   options;
   data;
   currentCity;
+  dataDiagramm = [];
   constructor (private getData: GetDataService) {}
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
   ngOnInit () {
     this.getData.getApi('').subscribe(response => {this.value = response;
-    console.log('weateher data', this.value);
+    console.log('weateher data', response);
     this.days = this.value.list;
+    for (let i = 0; i < this.value.list.lenght; i++) {
+      this.dataDiagramm.push(this.value.list[i].temp.day)
+      console.log('diagramm' , this.dataDiagramm)
+    }
     this.options = {
       chart: {
         type: 'discreteBarChart',
@@ -54,7 +59,7 @@ export class WeatherComponent implements OnInit {
         values: [
           {
             "label" : new Date(this.value.list[0].dt * 1000).toLocaleDateString(),
-            "value" : this.value.list[0].temp.max
+            "value" : this.value.list[0].temp.day
           },
           {
             "label" : new Date(this.value.list[1].dt * 1000).toLocaleDateString(),
@@ -130,8 +135,6 @@ export class WeatherComponent implements OnInit {
     });
   }
   changeCity (event, city) {
-    this.data.newCity = city;
-    this.currentCity = city;
     this.getData.getApi(city).subscribe(response => {this.value = response;
       this.days = this.value.list;
       this.options = {

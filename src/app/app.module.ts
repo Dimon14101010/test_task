@@ -11,7 +11,6 @@ import { WeatherComponent } from './weather/weather.component';
 import { NvD3Module } from 'ng2-nvd3';
 import 'd3';
 import 'nvd3';
-import {NguiAutoCompleteModule} from '@ngui/auto-complete';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NguiMapModule } from '@ngui/map';
 
@@ -25,7 +24,6 @@ import { NguiMapModule } from '@ngui/map';
     HttpClientModule,
     RouterModule.forRoot(routes),
     NvD3Module,
-    NguiAutoCompleteModule,
     ReactiveFormsModule,
     FormsModule,
     NguiMapModule.forRoot({
