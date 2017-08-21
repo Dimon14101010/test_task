@@ -47,7 +47,6 @@ export class WeatherComponent implements OnInit {
     this.getData.getWeatherDaily(city).subscribe(response => {this.valueDaily = response;
     this.currentCity = city;
       this.days = this.valueDaily.list;
-      this.options = this.diagram.diagramOptions;
       for (let i = 0 ; i < this.getData.days ; i++) {
         this.valuesDiagramTemp[i] = {'label' : new Date(this.valueDaily.list[i].dt * 1000).toLocaleDateString(),
           'value' : this.valueDaily.list[i].temp.day};
@@ -62,28 +61,20 @@ export class WeatherComponent implements OnInit {
   console.log(city, this.valueDaily.list);
   }
   toPressure () {
-    this.getData.getWeatherNow(this.currentCity).subscribe(response => this.valueNow = response);
-    console.log(this.currentCity)
-
-    this.getData.getWeatherDaily(this.currentCity).subscribe(response => {this.valueDaily = response;
-    this.options = this.diagram.diagramOptions;
-    this.days = this.valueDaily.list;
     for (let i = 0 ; i < this.getData.days ; i++) {
       this.valuesDiagramPress[i] = {'label' : new Date(this.valueDaily.list[i].dt * 1000).toLocaleDateString(),
         'value' : this.valueDaily.list[i].pressure};
     }
-
+      this.diagram.diagramOptions.chart.yAxis.axisLabel = 'pressure';
       this.data = [
         {
           key: "Cumulative Return",
           values: this.valuesDiagramPress
         }
       ];
-    });
   }
   toTemp () {
-    this.getData.getWeatherNow(this.currentCity).subscribe(response => this.valueNow = response);
-    this.options = this.diagram.diagramOptions;
+    this.diagram.diagramOptions.chart.yAxis.axisLabel = 'temperature';
     this.data = [
       {
         key: "Cumulative Return",
